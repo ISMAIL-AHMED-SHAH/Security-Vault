@@ -5,6 +5,13 @@ from logic.encryption import hash_passkey, encrypt_data, decrypt_data
 from logic.auth import init_auth_state, reset_attempts, reset_data, register_user, login_user
 from storage.database import store_entry, retrieve_entry, load_data, clear_user_data
 from utils.helpers import export_data, import_data
+import base64
+
+def get_base64_image(image_path):
+    with open(image_path, "rb") as img_file:
+        encoded = base64.b64encode(img_file.read()).decode()
+    return f"data:image/png;base64,{encoded}"
+
 
 # --- Init ---
 st.set_page_config(page_title="🔐 Secure Data Vault", layout="centered")
@@ -57,6 +64,20 @@ if uploaded:
 
 # --- HOME ---
 if choice == "Home":
+    img_url = get_base64_image("assets/home.webp")
+
+    st.markdown(f"""
+    <style>
+    .stApp {{
+        background-image: url("{img_url}");
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+    }}
+    </style>
+    """, unsafe_allow_html=True)
+
+
     st.title("🔐 Secure Data Encryption System")
     st.markdown("""
     - Encrypt & store secret data with a passkey.  
@@ -66,6 +87,7 @@ if choice == "Home":
 
 # --- REGISTER ---
 elif choice == "Register":
+    st.image("assets/register.png", use_container_width=True)
     st.subheader("🆕 Register")
     new_user = st.text_input("Choose Username")
     new_pass = st.text_input("Choose Password", type="password")

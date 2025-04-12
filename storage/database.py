@@ -42,5 +42,6 @@ def retrieve_entry(encrypted_text, hashed_passkey):
 # --- Delete Entry ---
 def clear_user_data(username):
     data = load_data()
-    data = {k: v for k, v in data.items() if v.get("owner") != username}
-    save_data(data)
+    new_data = {k: v for k, v in data.items() if v.get("owner") != username}
+    with open(DATA_FILE, "w") as f:
+        json.dump(new_data, f, indent=4)
