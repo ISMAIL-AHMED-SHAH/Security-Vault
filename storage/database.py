@@ -37,3 +37,10 @@ def retrieve_entry(encrypted_text, hashed_passkey):
     if entry and entry["passkey"] == hashed_passkey:
         return entry
     return None
+
+
+# --- Delete Entry ---
+def clear_user_data(username):
+    data = load_data()
+    data = {k: v for k, v in data.items() if v.get("owner") != username}
+    save_data(data)

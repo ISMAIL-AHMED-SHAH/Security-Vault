@@ -44,6 +44,6 @@ def reset_attempts():
 
 def reset_data():
     import os
-    for file in ["data.json", "users.json"]:
-        if os.path.exists(file):
-            os.remove(file)
+    data_file = "data.json"
+    if os.path.exists(data_file):
+        os.remove(data_file)

@@ -1,5 +1,4 @@
 import shutil
-import os
 
 def export_data(filename="secure_data_backup.json"):
     shutil.copy("storage/users.json", filename)
