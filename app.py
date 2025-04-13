@@ -84,7 +84,7 @@ if choice == "Home":
     - Decrypt only with the correct key.  
     - App clears after 3 failed attempts.
     """)
-
+    st.image("todo.webp", use_container_width=True)
 # --- REGISTER ---
 elif choice == "Register":
     st.image("assets/register.png", use_container_width=True)
