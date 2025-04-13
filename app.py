@@ -103,7 +103,9 @@ if choice == "Home":
     - Decrypt only with the correct key.  
     - App clears after 3 failed attempts.
     """)
-
+    st.markdown("----")
+    st.markdown("----")
+    st.image("assets/capt.png", use_container_width=True)
 # --- REGISTER ---
 elif choice == "Register":
     st.image("assets/register.png", use_container_width=True)
@@ -164,9 +166,8 @@ elif choice == "Login":
 
 # --- DASHBOARD ---
 elif choice == "Dashboard":
-
-    img_url = get_base64_image("assets/store.jpeg")
-
+    # Background image
+    img_url = get_base64_image("assets/store.jpeg")  # Use a dashboard-specific image if available
     st.markdown(f"""
         <style>
         .stApp {{
@@ -176,69 +177,94 @@ elif choice == "Dashboard":
             background-attachment: fixed;
         }}
         </style>
-        """, unsafe_allow_html=True)
+    """, unsafe_allow_html=True)
 
-    if st.session_state.get("is_logged_in"):
-        st.subheader(f"👋 Welcome, {st.session_state.get('username')}")
-        data = load_data()
-        user_entries = {
-            k: v for k, v in data.items()
-            if v.get("owner") == st.session_state.get("username")
-        }
+    # Title
+    st.subheader("📊 My Secure Dashboard")
 
-        if user_entries:
-            df = pd.DataFrame(user_entries).T
-            st.dataframe(df[["encrypted_text"]])
+    # Columns layout
+    col1, col2 = st.columns([1, 2])
 
-            if st.button("🧹 Clear My Data"):
-                clear_user_data(st.session_state["username"])
-                st.success("✅ Your data has been cleared.")
-                st.rerun()
+    # --- Left Column: Image ---
+    with col1:
+        st.image("assets/cell.png", use_container_width=True)
+
+    # --- Right Column: User Data (Only if logged in) ---
+    with col2:
+        if st.session_state.get("is_logged_in"):
+            st.markdown(f"👤 Logged in as: `{st.session_state.get('username')}`")
+
+            data = load_data()
+            user_entries = {
+                k: v for k, v in data.items()
+                if v.get("owner") == st.session_state.get("username")
+            }
+
+            if user_entries:
+                df = pd.DataFrame(user_entries).T
+                st.dataframe(df[["encrypted_text"]])
+
+                if st.button("🧹 Clear My Data"):
+                    clear_user_data(st.session_state["username"])
+                    st.success("✅ Your data has been cleared.")
+                    st.rerun()
+            else:
+                st.info("📭 Your dashboard is empty. Nothing to show.")
         else:
-            st.info("📭 Your dashboard is empty. Nothing to show.")
-    else:
-        st.warning("🚫 You must log in to access your dashboard.")
+            st.warning("🚫 You must log in to access your dashboard.")
+
+
 
 # --- STORE DATA ---
 elif choice == "Store Data":
-
+    # Apply Background
     img_url = get_base64_image("assets/store.jpeg")
-
     st.markdown(f"""
-            <style>
-            .stApp {{
-                background-image: url("{img_url}");
-                background-size: cover;
-                background-repeat: no-repeat;
-                background-attachment: fixed;
-            }}
-            </style>
-            """, unsafe_allow_html=True)
-    if not st.session_state.get("is_logged_in"):
-        st.warning("🚫 You must log in to store data.")
-        st.stop()
+        <style>
+        .stApp {{
+            background-image: url("{img_url}");
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }}
+        </style>
+    """, unsafe_allow_html=True)
 
-    st.subheader("📂 Store Secure Data")
-    username = st.session_state.get("username", "")
-    st.markdown(f"👤 Logged in as: `{username}`")
-    data = st.text_area("🔐 Enter Sensitive Data")
-    passkey = st.text_input("🔑 Create a Passkey", type="password")
+    st.subheader("📂 Store Secure Data")  # Always show
+    col1, col2 = st.columns([1, 2])
 
-    if st.button("💾 Encrypt & Store"):
-        if data and passkey:
-            encrypted = encrypt_data(data)
-            hashed = hash_passkey(passkey)
-            store_entry(username, encrypted, hashed)
-            st.success("✅ Data stored securely.")
-            st.code(encrypted)
+    # --- Left Column: Image ---
+    with col1:
+        st.image("assets/storage.png", use_container_width=True)
+
+    # --- Right Column: Show form only if logged in ---
+    with col2:
+        if not st.session_state.get("is_logged_in"):
+            st.warning("🚫 You must log in to store data.")
         else:
-            st.warning("All fields are required!")
+            username = st.session_state.get("username", "")
+            st.markdown(f"👤 Logged in as: `{username}`")
+
+            data = st.text_area("🔐 Enter Sensitive Data")
+            passkey = st.text_input("🔑 Create a Passkey", type="password")
+
+            if st.button("💾 Encrypt & Store"):
+                if data and passkey:
+                    encrypted = encrypt_data(data)
+                    hashed = hash_passkey(passkey)
+                    store_entry(username, encrypted, hashed)
+                    st.success("✅ Data stored securely.")
+                    st.code(encrypted)
+                else:
+                    st.warning("⚠️ All fields are required!")
+
+
 
 # --- RETRIEVE DATA ---
 elif choice == "Retrieve Data":
 
-    img_url = get_base64_image("assets/store.jpeg")
-
+    # Background
+    img_url = get_base64_image("assets/store.jpeg")  # Use any bg image you like
     st.markdown(f"""
         <style>
         .stApp {{
@@ -248,14 +274,17 @@ elif choice == "Retrieve Data":
             background-attachment: fixed;
         }}
         </style>
-        """, unsafe_allow_html=True)
+    """, unsafe_allow_html=True)
 
+    # Title
+    st.subheader("🔍 Retrieve Your Data")
+
+    # 🔐 Access Check
     if not st.session_state.get("is_logged_in"):
         st.warning("🚫 You must log in to retrieve data.")
         st.stop()
 
-    st.subheader("🔍 Retrieve Your Data")
-
+    # 🔐 Lockout Check
     if st.session_state.get("failed_attempts", 0) >= 3 and not st.session_state.get("is_authenticated", False):
         if not st.session_state.get("rerun_triggered", False):
             st.session_state.rerun_triggered = True
@@ -265,27 +294,36 @@ elif choice == "Retrieve Data":
             st.warning("🔐 Locked! Please go to Login Page to reauthorize.")
             st.stop()
 
-    encrypted_text = st.text_area("🔒 Paste Encrypted Text")
-    passkey = st.text_input("🔑 Enter Your Passkey", type="password")
+    # --- Layout ---
+    col1, col2 = st.columns([1, 2])
 
-    if st.button("🔓 Decrypt"):
-        if encrypted_text and passkey:
-            hashed = hash_passkey(passkey)
-            entry = retrieve_entry(encrypted_text, hashed)
+    # Left Column: Image
+    with col1:
+        st.image("assets/data.png", use_container_width=True)
 
-            if entry:
-                decrypted = decrypt_data(encrypted_text)
-                if decrypted:
-                    st.success("✅ Decryption Successful")
-                    st.code(decrypted)
-                    reset_attempts()
+    # Right Column: Input + Logic
+    with col2:
+        encrypted_text = st.text_area("🔒 Paste Encrypted Text")
+        passkey = st.text_input("🔑 Enter Your Passkey", type="password")
+
+        if st.button("🔓 Decrypt"):
+            if encrypted_text and passkey:
+                hashed = hash_passkey(passkey)
+                entry = retrieve_entry(encrypted_text, hashed)
+
+                if entry:
+                    decrypted = decrypt_data(encrypted_text)
+                    if decrypted:
+                        st.success("✅ Decryption Successful")
+                        st.code(decrypted)
+                        reset_attempts()
+                    else:
+                        st.error("❌ Decryption failed! Encrypted data or passkey may be incorrect.")
                 else:
-                    st.error("❌ Decryption failed! Encrypted data or passkey may be incorrect.")
+                    st.session_state.failed_attempts += 1
+                    remaining = 3 - st.session_state.failed_attempts
+                    st.error(f"❌ Incorrect credentials! Attempts left: {remaining}")
+                    if remaining == 0:
+                        st.warning("🔐 Locked out! Please reauthorize.")
             else:
-                st.session_state.failed_attempts += 1
-                remaining = 3 - st.session_state.failed_attempts
-                st.error(f"❌ Incorrect credentials! Attempts left: {remaining}")
-                if remaining == 0:
-                    st.warning("🔐 Locked out! Please reauthorize.")
-        else:
-            st.warning("Both fields are required!")
+                st.warning("Both fields are required!")
