@@ -159,7 +159,7 @@ elif choice == "Login":
             st.session_state.rerun_triggered = False
             st.session_state.failed_attempts = 0
             if user == "admin":
-                st.session_state.is_authenticated = True  # Needed for admin views
+                st.session_state.is_authenticated = True 
             st.success("✅ Logged in successfully!")
         else:
             st.error("❌ Invalid credentials.")
@@ -167,7 +167,7 @@ elif choice == "Login":
 # --- DASHBOARD ---
 elif choice == "Dashboard":
     # Background image
-    img_url = get_base64_image("assets/store.jpeg")  # Use a dashboard-specific image if available
+    img_url = get_base64_image("assets/store.jpeg")
     st.markdown(f"""
         <style>
         .stApp {{
@@ -264,7 +264,7 @@ elif choice == "Store Data":
 elif choice == "Retrieve Data":
 
     # Background
-    img_url = get_base64_image("assets/store.jpeg")  # Use any bg image you like
+    img_url = get_base64_image("assets/store.jpeg")
     st.markdown(f"""
         <style>
         .stApp {{
