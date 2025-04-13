@@ -18,7 +18,25 @@ st.set_page_config(page_title="🔐 Secure Data Vault", layout="centered")
 init_auth_state()
 
 # --- Sidebar Navigation ---
+sidebar_bg = get_base64_image("assets/sidebar.png")
+
+st.markdown(f"""
+    <style>
+    [data-testid="stSidebar"] {{
+        background-image: url("{sidebar_bg}");
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+    }}
+    </style>
+""", unsafe_allow_html=True)
+
+st.sidebar.markdown("---")
+st.sidebar.markdown("---")
+
 st.sidebar.title("🔐 Secure Data Vault")
+
+
 menu = ["Home", "Register", "Login", "Dashboard", "Store Data", "Retrieve Data"]
 choice = st.sidebar.selectbox("🔍 Navigate", menu)
 
@@ -52,6 +70,7 @@ if st.session_state.get("is_logged_in"):
                 st.sidebar.info("No entries found.")
 
 # --- Export / Import ---
+st.sidebar.markdown("---")
 st.sidebar.markdown("### 📤 Export / Import")
 if st.sidebar.button("📤 Export Data"):
     path = export_data()
@@ -84,10 +103,22 @@ if choice == "Home":
     - Decrypt only with the correct key.  
     - App clears after 3 failed attempts.
     """)
-    st.image("todo.webp", use_container_width=True)
+
 # --- REGISTER ---
 elif choice == "Register":
     st.image("assets/register.png", use_container_width=True)
+    img_url = get_base64_image("assets/store.jpeg")
+
+    st.markdown(f"""
+            <style>
+            .stApp {{
+                background-image: url("{img_url}");
+                background-size: cover;
+                background-repeat: no-repeat;
+                background-attachment: fixed;
+            }}
+            </style>
+            """, unsafe_allow_html=True)
     st.subheader("🆕 Register")
     new_user = st.text_input("Choose Username")
     new_pass = st.text_input("Choose Password", type="password")
@@ -106,6 +137,19 @@ elif choice == "Login":
     user = st.text_input("Username")
     pw = st.text_input("Password", type="password")
 
+    img_url = get_base64_image("assets/login.jpg")
+
+    st.markdown(f"""
+    <style>
+    .stApp {{
+        background-image: url("{img_url}");
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+    }}
+    </style>
+    """, unsafe_allow_html=True)
+
     if st.button("Login"):
         if login_user(user, pw):
             st.session_state.is_logged_in = True
@@ -120,6 +164,20 @@ elif choice == "Login":
 
 # --- DASHBOARD ---
 elif choice == "Dashboard":
+
+    img_url = get_base64_image("assets/store.jpeg")
+
+    st.markdown(f"""
+        <style>
+        .stApp {{
+            background-image: url("{img_url}");
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }}
+        </style>
+        """, unsafe_allow_html=True)
+
     if st.session_state.get("is_logged_in"):
         st.subheader(f"👋 Welcome, {st.session_state.get('username')}")
         data = load_data()
@@ -143,6 +201,19 @@ elif choice == "Dashboard":
 
 # --- STORE DATA ---
 elif choice == "Store Data":
+
+    img_url = get_base64_image("assets/store.jpeg")
+
+    st.markdown(f"""
+            <style>
+            .stApp {{
+                background-image: url("{img_url}");
+                background-size: cover;
+                background-repeat: no-repeat;
+                background-attachment: fixed;
+            }}
+            </style>
+            """, unsafe_allow_html=True)
     if not st.session_state.get("is_logged_in"):
         st.warning("🚫 You must log in to store data.")
         st.stop()
@@ -165,6 +236,20 @@ elif choice == "Store Data":
 
 # --- RETRIEVE DATA ---
 elif choice == "Retrieve Data":
+
+    img_url = get_base64_image("assets/store.jpeg")
+
+    st.markdown(f"""
+        <style>
+        .stApp {{
+            background-image: url("{img_url}");
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }}
+        </style>
+        """, unsafe_allow_html=True)
+
     if not st.session_state.get("is_logged_in"):
         st.warning("🚫 You must log in to retrieve data.")
         st.stop()
