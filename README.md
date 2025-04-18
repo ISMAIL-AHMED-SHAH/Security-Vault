@@ -39,52 +39,6 @@ A user-friendly encryption system built using **Python, Streamlit**, and **Ferne
 
 ---
 
-## 🧾 File Structure
-
-```
-secure-data-vault/
-│
-├── app.py                    # Main Streamlit app
-├── secret.key                # Fernet encryption key (auto-generated)
-│
-├── logic/
-│   ├── auth.py               # Registration, Login, Session Management
-│   └── encryption.py         # Hashing & Fernet Encryption/Decryption
-│
-├── storage/
-│   └── database.py           # Load/Store/Reset JSON Data
-│
-├── utils/
-│   └── helpers.py            # Export/Import utility functions
-│
-├── assets/                   # UI images for pages & sidebar
-│
-├── users.json                # Stores registered users (hashed)
-├── data.json                 # Encrypted data records
-├── requirements.txt          # Streamlit, cryptography, pandas
-└── README.md                 # This file
-```
-
----
-
-## 🧪 Requirements
-
-Install the dependencies:
-
-```bash
-pip install -r requirements.txt
-```
-
-### `requirements.txt`:
-
-```txt
-streamlit
-cryptography
-pandas
-```
-
----
-
 ## 🖼️ UI Preview
 
 | Page            | Preview                          |
